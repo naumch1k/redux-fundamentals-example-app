@@ -45,6 +45,15 @@ const appReducer = (state = initialState, action) => {
         })
       }
     }
+    case 'filters/statusFilterChanged': {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          status: action.payload,
+        }
+      }
+    }
     default:
       return state
   }
