@@ -30,6 +30,21 @@ const appReducer = (state = initialState, action) => {
         ]
       }
     }
+    case 'todos/todoToggled': {
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo.id !== action.payload) {
+            return todo
+          }
+
+          return {
+            ...todo,
+            completed: !todo.completed,
+          }
+        })
+      }
+    }
     default:
       return state
   }
