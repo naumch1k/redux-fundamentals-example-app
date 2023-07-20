@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './reducer'
-import { loggerMiddleware } from './exampleAddons/middleware'
+import { delayedMessageMiddleware } from './exampleAddons/middleware'
 
-const middlewareEnhancer = applyMiddleware(loggerMiddleware)
+const middlewareEnhancer = applyMiddleware(delayedMessageMiddleware)
 
 const store = createStore(rootReducer, middlewareEnhancer)
 
