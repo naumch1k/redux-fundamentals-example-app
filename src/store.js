@@ -1,6 +1,9 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './reducer'
+import { loggerMiddleware } from './exampleAddons/middleware'
 
-const store = createStore(rootReducer)
+const middlewareEnhancer = applyMiddleware(loggerMiddleware)
+
+const store = createStore(rootReducer, middlewareEnhancer)
 
 export default store
