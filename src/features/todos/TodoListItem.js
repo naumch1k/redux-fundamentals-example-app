@@ -14,11 +14,24 @@ const TodoListItem = ({ id }) => {
   const dispatch = useDispatch()
 
   const handleCompletedChange = () => {
-    dispatch({ action: 'todos/todoToggled', payload: todo.id})
+    dispatch({ type: 'todos/todoToggled', payload: todo.id})
   }
 
-  const handleColorChange = () => {}
-  const onDelete = () => {}
+  const handleColorChange = e => {
+    const color = e.target.value
+
+    dispatch({
+      type: 'todos/colorSelected',
+      payload: { todoId: todo.id, color },
+    })
+  }
+
+  const onDelete = () => {
+    dispatch({
+      type: 'todos/todoDeleted',
+      payload: todo.id,
+    })
+  }
 
   const colorOptions = availableColors.map(color => (
     <option key={color} value={color}>
