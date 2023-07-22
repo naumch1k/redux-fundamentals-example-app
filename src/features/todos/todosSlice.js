@@ -2,22 +2,10 @@ import { client } from '../../api/client'
 
 const initialState = []
 
-const getNextTodoId = (todos) => {
-  const maxId = todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1)
-  return maxId + 1
-}
-
 const todosReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'todos/todoAdded': {
-      return [
-        ...state,
-        {
-          id: getNextTodoId(state),
-          text: action.payload,
-          completed: false,
-        }
-      ]
+      return [...state, action.payload ]
     }
     case 'todos/todoToggled': {
       return state.map(todo => {
