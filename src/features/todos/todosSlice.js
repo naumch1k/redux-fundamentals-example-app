@@ -1,3 +1,5 @@
+import { client } from '../../api/client'
+
 const initialState = []
 
 const getNextTodoId = (todos) => {
@@ -60,3 +62,8 @@ const todosReducer = (state = initialState, action) => {
 }
 
 export default todosReducer
+
+export const getTodos = async (dispatch, getState) => {
+  const response = await client.get('/fakeApi/todos')
+  dispatch({ type: 'todos/todosLoaded', payload: response.todos })
+}
