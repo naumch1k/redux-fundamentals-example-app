@@ -70,3 +70,12 @@ export const getTodos = async (dispatch, getState) => {
   const response = await client.get('/fakeApi/todos')
   dispatch({ type: 'todos/todosLoaded', payload: response.todos })
 }
+
+export const saveNewTodo = text => {
+  return async function saveNewTodoThunk(dispatch, getState) {
+    const initialTodo = { text }
+
+    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
+    dispatch({ type: 'todos/todoAdded', payload: response.todo })
+  }
+}
