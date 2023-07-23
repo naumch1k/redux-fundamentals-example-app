@@ -99,13 +99,19 @@ export const saveNewTodo = text => {
 }
 
 // Selector functions
+export const selectTodos = state => state.todos
+
+export const selectTodoById = (state, todoId) => {
+  return selectTodos(state).find(todo => todo.id === todoId)
+}
+
 export const selectTodoIds = createSelector(
-  state => state.todos,
+  selectTodos,
   todos => todos.map(todo => todo.id)
 )
 
 export const selectFilteredTodos = createSelector(
-  state => state.todos,
+  selectTodos,
   state => state.filters,
   (todos, filters) => {
     const { status, colors } = filters
