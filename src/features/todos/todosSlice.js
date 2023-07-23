@@ -55,14 +55,31 @@ const todosReducer = (state = initialState, action) => {
 export default todosReducer
 
 // Action creators
-export const todosLoaded = todos => {
-  return {
-    type: 'todos/todosLoaded',
-    payload: todos,
-  }
-}
+export const todosLoaded = todos => ({
+  type: 'todos/todosLoaded',
+  payload: todos,
+})
 
 export const todoAdded = todo => ({ type: 'todos/todoAdded', payload: todo })
+
+export const todoToggled = todoId => ({
+  type: 'todos/todoToggled',
+  payload: todoId,
+})
+
+export const todoColorSelected = (todoId, color) => ({
+  type: 'todos/colorSelected',
+  payload: { todoId, color },
+})
+
+export const todoDeleted = todoId => ({
+  type: 'todos/todoDeleted',
+  payload: todoId,
+})
+
+export const allTodosCompleted = () => ({ type: 'todos/allCompleted' })
+
+export const completedTodosCleared = () => ({ type: 'todos/completedCleared' })
 
 // Thunk functions
 export const getTodos = () =>  async dispatch =>  {
