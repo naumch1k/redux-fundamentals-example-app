@@ -106,14 +106,22 @@ export const selectTodoIds = createSelector(
 
 export const selectFilteredTodos = createSelector(
   state => state.todos,
-  state => state.filters.status,
-  (todos, status) => {
-    if (status === StatusFilters.All) {
+  state => state.filters,
+  (todos, filters) => {
+    const { status, colors } = filters
+    const showAllCompletions = status === StatusFilters.All
+
+    if (showAllCompletions && colors.length === 0) {
       return todos
     }
 
     const completedStatus = status === StatusFilters.Completed
-    return todos.filter(todo => todo.completed === completedStatus)
+    return todos.filter(todo => {
+      const statusMatches = showAllCompletions || todo.completed === completedStatus
+      const colorMatches = colors.length === 0 || colors.includes(todo.color)
+
+      return statusMatches && colorMatches
+    })
   }
 )
 
