@@ -54,9 +54,25 @@ const todosReducer = (state = initialState, action) => {
 
 export default todosReducer
 
+// Action creators
+export const todosLoaded = todos => {
+  return {
+    type: 'todos/todosLoaded',
+    payload: todos,
+  }
+}
+
+export const todoAdded = todo => {
+  return {
+    type: 'todos/todoAdded',
+    payload: todo,
+  }
+}
+
+// Thunk functions
 export const getTodos = async (dispatch, getState) => {
   const response = await client.get('/fakeApi/todos')
-  dispatch({ type: 'todos/todosLoaded', payload: response.todos })
+  dispatch(todosLoaded(response.todos))
 }
 
 export const saveNewTodo = text => {
@@ -64,6 +80,6 @@ export const saveNewTodo = text => {
     const initialTodo = { text }
 
     const response = await client.post('/fakeApi/todos', { todo: initialTodo })
-    dispatch({ type: 'todos/todoAdded', payload: response.todo })
+    dispatch(todoAdded(response.todo))
   }
 }
