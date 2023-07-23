@@ -62,15 +62,10 @@ export const todosLoaded = todos => {
   }
 }
 
-export const todoAdded = todo => {
-  return {
-    type: 'todos/todoAdded',
-    payload: todo,
-  }
-}
+export const todoAdded = todo => ({ type: 'todos/todoAdded', payload: todo })
 
 // Thunk functions
-export const getTodos = async (dispatch, getState) => {
+export const getTodos = () =>  async dispatch =>  {
   const response = await client.get('/fakeApi/todos')
   dispatch(todosLoaded(response.todos))
 }

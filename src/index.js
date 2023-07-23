@@ -7,7 +7,7 @@ import './api/server'
 import store from './store'
 import { getTodos } from './features/todos/todosSlice'
 
-store.dispatch(getTodos)
+store.dispatch(getTodos())
 
 ReactDOM.render(
   <React.StrictMode>
