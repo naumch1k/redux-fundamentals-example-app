@@ -67,9 +67,16 @@ const todosReducer = (state = initialState, action) => {
         entities: state.entities.filter(todo => !todo.completed),
       }
     }
+    case 'todos/todosLoading': {
+      return {
+        ...state,
+        status: 'loading',
+      }
+    }
     case 'todos/todosLoaded': {
       return {
         ...state,
+        status: 'idle',
         entities: action.payload
       }
     }
@@ -81,6 +88,8 @@ const todosReducer = (state = initialState, action) => {
 export default todosReducer
 
 // Action creators
+export const todosLoading = () => ({ type: 'todos/todosLoading' })
+
 export const todosLoaded = todos => ({
   type: 'todos/todosLoaded',
   payload: todos,
@@ -109,6 +118,7 @@ export const completedTodosCleared = () => ({ type: 'todos/completedCleared' })
 
 // Thunk functions
 export const getTodos = () =>  async dispatch =>  {
+  dispatch(todosLoading())
   const response = await client.get('/fakeApi/todos')
   dispatch(todosLoaded(response.todos))
 }
