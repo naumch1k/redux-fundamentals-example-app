@@ -1,4 +1,8 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  createSelector,
+  createAsyncThunk,
+} from '@reduxjs/toolkit'
 import { client } from '../../api/client'
 import { StatusFilters } from '../filters/filtersSlice'
 
@@ -54,10 +58,28 @@ const todosSlice = createSlice({
       action.payload.forEach(todo => {
         newEntities[todo.id] = todo
       })
-      state.status = 'idle'
       state.entities = newEntities
+      state.status = 'idle'
     },
-  }
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(getTodos.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(getTodos.fulfilled, (state, action) => {
+        const newEntities = {}
+        action.payload.forEach(todo => {
+          newEntities[todo.id] = todo
+        })
+        state.entities = newEntities
+        state.status = 'idle'
+      })
+      .addCase(saveNewTodo.fulfilled, (state, action) => {
+        const todo = action.payload
+        state.entities[todo.id] = todo
+      })
+  },
 })
 
 export const {
@@ -74,20 +96,22 @@ export const {
 export default todosSlice.reducer
 
 // Thunk functions
-export const getTodos = () =>  async dispatch =>  {
-  dispatch(todosLoading())
-  const response = await client.get('/fakeApi/todos')
-  dispatch(todosLoaded(response.todos))
-}
-
-export const saveNewTodo = text => {
-  return async function saveNewTodoThunk(dispatch, getState) {
-    const initialTodo = { text }
-
-    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
-    dispatch(todoAdded(response.todo))
+export const getTodos = createAsyncThunk(
+  'todos/getTodos',
+  async () => {
+    const response = await client.get('/fakeApi/todos')
+    return response.todos
   }
-}
+)
+
+export const saveNewTodo = createAsyncThunk(
+  'todos/saveNewTodo',
+  async text => {
+    const initialTodo = { text }
+    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
+    return response.todo
+  }
+)
 
 // Selector functions
 const selectTodoEntities = state => state.todos.entities
